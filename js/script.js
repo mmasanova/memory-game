@@ -2,13 +2,16 @@
 let cards = [];
 let images = [ 'apple.jpg', 'apricot.png', 'banana.jpg', 'grapes.jpg', 'kiwi.jpg', 'orange.svg', 'plum.jpg', 'watermelon.jpg' ];
 
-document.addEventListener('DOMContentLoaded', createGrid);
+document.addEventListener('DOMContentLoaded', initialise);
 
-function createGrid() {
-	let html = '';
+function initialise() {
+	createCards();
+	shuffleCards();
+	displayCards();
+}
+
+function createCards() {
 	images = images.concat(images);
-
-	const container = document.getElementById('cards-container');
 
 	for (let image of images) {
 		let card = {
@@ -16,13 +19,35 @@ function createGrid() {
 		}
 
 		cards.push(card);
-	}
+	}	
+}
+
+function displayCards() {
+	let html = '';
+	const container = document.getElementById('cards-container');
 
 	for (let card of cards) {
 		html += `<div class="card">
-					<img src="images/${card.image}">
+					<div class="front">
+						<img src="images/${card.image}">
+					</div>
+					<div class="back">
+					</div>
 				</div>`;
 	}
 
 	container.innerHTML = html;
+}
+
+function shuffleCards() {
+	for (let cardX = 0; cardX < cards.length; cardX++) {
+		const randomIndex = getRandomNumber(7);
+		const tempCard = cards[cardX]
+		cards[cardX] = cards[randomIndex];
+		cards[randomIndex] = tempCard;
+	}
+}
+
+function getRandomNumber(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
