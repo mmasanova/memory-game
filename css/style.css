@@ -1,0 +1,33 @@
+
+#cards-container {
+	width: 51vw;
+	display: flex;
+	flex-wrap: wrap;
+	border: 1px solid #000;
+	margin: auto;
+	padding: 1vw;
+}
+
+.card {
+	width: 12vw;
+	height: 12vw;
+	border: 1px solid #000;
+	margin: 0 1vw 1vw 0;
+	box-sizing: border-box;
+	text-align: center;
+}
+
+.card:nth-child(4n) {
+	margin: 0 0 1vw 0;
+}
+
+.card img {
+	width: 80%;
+}
+
+.flip {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+
+/*https://css-tricks.com/almanac/properties/b/backface-visibility/*/
