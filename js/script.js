@@ -11,32 +11,41 @@ function initialise() {
 }
 
 function createCards() {
+	let cardId = 0;
 	images = images.concat(images);
 
 	for (let image of images) {
 		let card = {
-			image: image
+			image: image,
+			id: cardId
 		}
 
 		cards.push(card);
+		cardId += 1;
 	}	
 }
 
 function displayCards() {
-	let html = '';
 	const container = document.getElementById('cards-container');
+	const docFragment = document.createDocumentFragment();
 
 	for (let card of cards) {
-		html += `<div class="card">
-					<div class="front">
+		const cardDiv = document.createElement('div');
+		cardDiv.className = 'card flip';
+		cardDiv.id = card.id;
+
+		const html = `<div class="front">
 						<img src="images/${card.image}">
 					</div>
 					<div class="back">
-					</div>
-				</div>`;
+					</div>`;
+
+		cardDiv.innerHTML = html;
+		cardDiv.addEventListener('click', flipCard);
+		docFragment.appendChild(cardDiv);
 	}
 
-	container.innerHTML = html;
+	container.appendChild(docFragment);
 }
 
 function shuffleCards() {
@@ -50,4 +59,9 @@ function shuffleCards() {
 
 function getRandomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+function flipCard(event) {
+		const card = event.currentTarget;
+		card.classList.toggle('flip');
 }
