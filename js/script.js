@@ -69,8 +69,9 @@ function getRandomNumber(max) {
 function cardClick(event) {
 	const card = event.currentTarget;
 	const cardIndex = card.dataset.index;
+	const alreadyFlipped = (activeCards.indexOf(cardIndex) !== -1);
 
-	if (!cards[cardIndex].pairFound && activeCards.length < 2) {
+	if (!cards[cardIndex].pairFound && activeCards.length < 2 && !alreadyFlipped) {
 		card.classList.toggle('flip');
 		activeCards.push(cardIndex);
 
