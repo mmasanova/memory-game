@@ -1,20 +1,18 @@
 
+@media screen and (min-width: 500px)
+{
+	#game-container {
+	    width: 80%;
+	}
+}
+
 @media screen and (min-width: 700px)
 {
 	body {
 		background: #fff;
 	}
-	
+
 	#game-container {
-	    width: 60vw;
-	}
-
-	#cards-container {
-		width: 51vw;
-	}
-
-	.card {
-		width: 12vw;
-		height: 12vw;
+	    max-width: 520px;
 	}
 }

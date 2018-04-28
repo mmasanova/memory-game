@@ -30,9 +30,18 @@ function createCards() {
 function displayCards() {
 	const container = document.getElementById('cards-container');
 	const docFragment = document.createDocumentFragment();
-
+	let row;
 
 	for (let cardX = 0; cardX < cards.length; cardX++) {
+		if (cardX % 4 === 0) {
+			if (cardX !== 0) {
+				docFragment.appendChild(row);
+			}
+
+			row = document.createElement('div');
+			row.className = 'row';
+		}
+
 		const card = cards[cardX];
 		const cardDiv = document.createElement('div');
 		cardDiv.className = 'card flip';
@@ -47,9 +56,10 @@ function displayCards() {
 
 		cardDiv.innerHTML = html;
 		cardDiv.addEventListener('click', cardClick);
-		docFragment.appendChild(cardDiv);
+		row.appendChild(cardDiv);
 	}
 
+	docFragment.appendChild(row);
 	container.appendChild(docFragment);
 }
 
