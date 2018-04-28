@@ -3,9 +3,11 @@ let cards = [];
 let images = [ 'cat.svg', 'cow.svg', 'fish.svg', 'owl.svg', 'panda.svg', 'pig.svg', 'penguin.svg', 'rabbit.svg' ];
 let activeCards = [];
 let startTime;
+let finalTime;
 let timer = null;
 let noMoves = 0;
 let starRating = 3;
+let gameWon = false;
 
 document.addEventListener('DOMContentLoaded', initialise);
 
@@ -166,16 +168,18 @@ function flipCardsBack() {
 }
 
 function checkGameWon() {
-	let gameWon = true;
+	let won = true;
 
 	for (let card of cards) {
 		if (!card.pairFound) {
-			gameWon = false;
+			won = false;
 			break;
 		}
 	}
 
-	if (gameWon) {
+	if (won) {
+		clearTimeout(timer);
+		gameWon = true;
 		alert('Congratulations, you won the game!');
 	}
 }
@@ -201,7 +205,9 @@ function timerTick() {
 
 	timerElement.innerHTML = displayTime;
 
-	timer = setTimeout(timerTick, 1000);
+	if (!gameWon) {
+		timer = setTimeout(timerTick, 1000);
+	}
 }
 
 function formatTime(time) {
