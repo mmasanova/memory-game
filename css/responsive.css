@@ -1,0 +1,12 @@
+
+@media screen and (min-width: 700px)
+{
+	#cards-container {
+		width: 51vw;
+	}
+
+	.card {
+		width: 12vw;
+		height: 12vw;
+	}
+}

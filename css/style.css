@@ -1,6 +1,6 @@
 
 #cards-container {
-	width: 51vw;
+	width: 80vw;
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid #000;
@@ -9,8 +9,8 @@
 }
 
 .card {
-	width: 12vw;
-	height: 12vw;
+	width: 19vw;
+	height: 19vw;
 	margin: 0 1vw 1vw 0;
 	box-sizing: border-box;
 	perspective: 600px;
