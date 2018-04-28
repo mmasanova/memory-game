@@ -5,6 +5,7 @@ let activeCards = [];
 let startTime;
 let timer = null;
 let noMoves = 0;
+let starRating = 3;
 
 document.addEventListener('DOMContentLoaded', initialise);
 
@@ -22,6 +23,9 @@ function initialise() {
 
 function prepareGame() {
 	noMoves = 0;
+	starRating = 3;
+
+	setUpStarRating();
 	shuffleCards();
 	displayCards();
 }
@@ -81,6 +85,7 @@ function displayCards() {
 
 function resetGame() {
 	resetTimer();
+	resetMoves();
 	clearCards();
 	prepareGame();
 }
@@ -221,4 +226,77 @@ function updateMoves() {
 	
 	noMoves += 1;
 	moves.innerHTML = noMoves;
+
+	updateStarRating();
+}
+
+function resetMoves() {
+	const moves = document.getElementById('moves');
+	moves.innerHTML = 0;
+}
+
+/* Star rating */
+
+function updateStarRating() {
+	const oldRating = starRating;
+	let newRating;
+
+	switch (true) {
+		case noMoves <= 12:
+			newRating = 3;
+			break;
+
+		case noMoves > 12 && noMoves <= 18:
+			newRating = 2;
+			break;
+
+		case noMoves > 18 && noMoves <= 24:
+			newRating = 1;
+			break;
+
+		default:
+			newRating = 0;
+	}
+
+	if (newRating !== oldRating) {
+		starRating = newRating;
+		displayStarRating();
+	}
+}
+
+function displayStarRating() {
+	let updateStar = null;
+
+	switch (starRating) {
+		case 0:
+			updateStar = document.getElementById('star-1');
+			break;
+
+		case 1:
+			updateStar = document.getElementById('star-2');
+			break;
+
+		case 2:
+			updateStar = document.getElementById('star-3');
+			break;
+
+		default:
+			break;
+	}
+
+	if (updateStar !== null) {
+		updateStar.classList.remove('mdi-star');
+		updateStar.classList.add('mdi-star-outline');
+	}
+}
+
+function setUpStarRating() {
+	const starRating = document.getElementById('star-rating');
+	let html = '';
+
+	for (let starX = 0; starX < 3; starX++) {
+		html += `<i id="star-${starX + 1}" class="mdi mdi-star star"></i>`;
+	}
+
+	starRating.innerHTML = html;
 }
