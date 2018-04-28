@@ -256,12 +256,8 @@ function updateStarRating() {
 			newRating = 2;
 			break;
 
-		case noMoves > 18 && noMoves <= 24:
-			newRating = 1;
-			break;
-
 		default:
-			newRating = 0;
+			newRating = 1;
 	}
 
 	if (newRating !== oldRating) {
@@ -274,10 +270,6 @@ function displayStarRating() {
 	let updateStar = null;
 
 	switch (starRating) {
-		case 0:
-			updateStar = document.getElementById('star-1');
-			break;
-
 		case 1:
 			updateStar = document.getElementById('star-2');
 			break;
