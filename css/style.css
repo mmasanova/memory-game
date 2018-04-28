@@ -21,7 +21,7 @@ body {
 
 #star-rating {
     flex: 0 0 4em;
-    padding-left: 0.5em;
+    margin: 0 0 0 7%;
 }
 
 .star {
@@ -43,6 +43,7 @@ body {
     font-size: 1.3em;
     cursor: pointer;
     outline: none;
+    margin: 0 6% 0 0;
 }
 
 /* Cards */
@@ -56,7 +57,7 @@ body {
 }
 
 #cards-container {
-	width: 95%;
+	width: 85%;
 	display: flex;
 	flex-wrap: wrap;
 	margin: auto;
@@ -72,7 +73,6 @@ body {
 }
 
 .card {
-	width: 23%;
     position: relative;
 	margin: 0 2% 2% 0;
 	box-sizing: border-box;
@@ -155,4 +155,10 @@ body {
     -webkit-transform: rotateX(0) rotateY(0);
     transform: rotateX(0) rotateY(0);
     box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+}
+
+/* Moves */
+
+#moves-indicator {
+    margin: 0.5em 0 0 6%;
 }

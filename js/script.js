@@ -4,6 +4,7 @@ let images = [ 'cat.svg', 'cow.svg', 'fish.svg', 'owl.svg', 'panda.svg', 'pig.sv
 let activeCards = [];
 let startTime;
 let timer = null;
+let noMoves = 0;
 
 document.addEventListener('DOMContentLoaded', initialise);
 
@@ -20,6 +21,7 @@ function initialise() {
 /* Set up game */
 
 function prepareGame() {
+	noMoves = 0;
 	shuffleCards();
 	displayCards();
 }
@@ -137,6 +139,8 @@ function checkCardsMatch() {
 	const card1 = cards[activeCards[0]];
 	const card2 = cards[activeCards[1]];
 
+	updateMoves();
+
 	if (card1.image === card2.image) {
 		card1.pairFound = true;
 		card2.pairFound = true;
@@ -208,4 +212,13 @@ function resetTimer() {
 
 	timer = null;
 	timerElement.innerHTML = '00:00';
+}
+
+/* Moves */
+
+function updateMoves() {
+	const moves = document.getElementById('moves');
+	
+	noMoves += 1;
+	moves.innerHTML = noMoves;
 }
