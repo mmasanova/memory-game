@@ -6,14 +6,43 @@ let activeCards = [];
 document.addEventListener('DOMContentLoaded', initialise);
 
 function initialise() {
+	const restart = document.getElementById('restart');
+	restart.addEventListener('click', resetGame);
+
+	images = images.concat(images);
+
 	createCards();
+	prepareGame();
+}
+
+function resetGame() {
+	clearCards();
+	prepareGame();
+}
+
+function clearCards() {
+	const container = document.getElementById('cards-container');
+
+	for (let rowX = container.childNodes.length - 1; rowX >= 0; rowX--) {
+		const row = container.childNodes[rowX];
+
+		for (let cardX = row.childNodes.length - 1; cardX >= 0; cardX--) { 
+			const card = row.childNodes[cardX];
+			card.removeEventListener('click', cardClick);
+			card.remove();
+		}
+
+		row.remove();
+	}
+}
+
+function prepareGame() {
 	shuffleCards();
 	displayCards();
 }
 
 function createCards() {
 	let cardId = 0;
-	images = images.concat(images);
 
 	for (let image of images) {
 		let card = {
