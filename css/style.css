@@ -1,16 +1,37 @@
 
+body {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    background: #b2ebf2;
+}
+
+#game-container {
+    width: 100%;
+    margin: auto;
+    background: #b2ebf2;
+    padding-bottom: 1em;
+    border-radius: 4px;
+}
+
+#header {
+    height: 6em;
+}
+
 #cards-container {
-	width: 80vw;
+	width: 92vw;
 	display: flex;
 	flex-wrap: wrap;
-	border: 1px solid #000;
 	margin: auto;
-	padding: 1vw;
+	padding: 1vw 1vw 0 1vw;
+    border-radius: 4px;
+    border: 1px solid #006064;
+    background: #fff;
 }
 
 .card {
-	width: 19vw;
-	height: 19vw;
+	width: 22vw;
+	height: 22vw;
 	margin: 0 1vw 1vw 0;
 	box-sizing: border-box;
 	perspective: 600px;
