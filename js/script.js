@@ -2,6 +2,8 @@
 let cards = [];
 let images = [ 'cat.svg', 'cow.svg', 'fish.svg', 'owl.svg', 'panda.svg', 'pig.svg', 'penguin.svg', 'rabbit.svg' ];
 let activeCards = [];
+let startTime;
+let timer = null;
 
 document.addEventListener('DOMContentLoaded', initialise);
 
@@ -15,26 +17,7 @@ function initialise() {
 	prepareGame();
 }
 
-function resetGame() {
-	clearCards();
-	prepareGame();
-}
-
-function clearCards() {
-	const container = document.getElementById('cards-container');
-
-	for (let rowX = container.childNodes.length - 1; rowX >= 0; rowX--) {
-		const row = container.childNodes[rowX];
-
-		for (let cardX = row.childNodes.length - 1; cardX >= 0; cardX--) { 
-			const card = row.childNodes[cardX];
-			card.removeEventListener('click', cardClick);
-			card.remove();
-		}
-
-		row.remove();
-	}
-}
+/* Set up game */
 
 function prepareGame() {
 	shuffleCards();
@@ -92,6 +75,32 @@ function displayCards() {
 	container.appendChild(docFragment);
 }
 
+/* Restart game */
+
+function resetGame() {
+	resetTimer();
+	clearCards();
+	prepareGame();
+}
+
+function clearCards() {
+	const container = document.getElementById('cards-container');
+
+	for (let rowX = container.childNodes.length - 1; rowX >= 0; rowX--) {
+		const row = container.childNodes[rowX];
+
+		for (let cardX = row.childNodes.length - 1; cardX >= 0; cardX--) { 
+			const card = row.childNodes[cardX];
+			card.removeEventListener('click', cardClick);
+			card.remove();
+		}
+
+		row.remove();
+	}
+}
+
+/* Shuffle cards */
+
 function shuffleCards() {
 	for (let cardX = 0; cardX < cards.length; cardX++) {
 		const randomIndex = getRandomNumber(7);
@@ -104,6 +113,8 @@ function shuffleCards() {
 function getRandomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+
+/* Handle card click */
 
 function cardClick(event) {
 	const card = event.currentTarget;
@@ -118,6 +129,8 @@ function cardClick(event) {
 			setTimeout(checkCardsMatch, 500);
 		}
 	}
+
+	if (timer === null) startTimer();
 }
 
 function checkCardsMatch() {
@@ -156,4 +169,43 @@ function checkGameWon() {
 	if (gameWon) {
 		alert('Congratulations, you won the game!');
 	}
+}
+
+/* Timer */
+
+function startTimer() {
+	const dateNow = new Date();
+	startTime = dateNow.getTime();
+	timerTick();
+}
+
+function timerTick() {
+	const dateNow = new Date();
+	const timerElement = document.getElementById('timer');
+	const ellapsedTime = new Date(dateNow.getTime() - startTime);
+	const hours = formatTime(ellapsedTime.getHours());
+	const minutes = formatTime(ellapsedTime.getMinutes());
+	const seconds = formatTime(ellapsedTime.getSeconds());
+	let displayTime = `${minutes}:${seconds}`;
+
+	if (hours > 0) displayTime = `${hours}:${displayTime}`;
+
+	timerElement.innerHTML = displayTime;
+
+	timer = setTimeout(timerTick, 1000);
+}
+
+function formatTime(time) {
+	if (time < 10) time = '0' + time;
+
+	return time;
+}
+
+function resetTimer() {
+	const timerElement = document.getElementById('timer');
+
+	clearTimeout(timer);
+
+	timer = null;
+	timerElement.innerHTML = '00:00';
 }
