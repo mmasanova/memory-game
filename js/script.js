@@ -92,6 +92,7 @@ function resetGame() {
 	prepareGame();
 }
 
+/* Remove cards including listeners to avoid memory leaks in older browsers */
 function clearCards() {
 	const container = document.getElementById('cards-container');
 
@@ -110,6 +111,7 @@ function clearCards() {
 
 /* Shuffle cards */
 
+/* Switch each card with another card with random index */
 function shuffleCards() {
 	for (let cardX = 0; cardX < cards.length; cardX++) {
 		const randomIndex = getRandomNumber(7);
@@ -192,6 +194,7 @@ function startTimer() {
 	timerTick();
 }
 
+/* Check difference between start time and time now, display the difference */
 function timerTick() {
 	const dateNow = new Date();
 	const timerElement = document.getElementById('timer');
