@@ -87,6 +87,8 @@ function checkCardsMatch() {
 	if (card1.image === card2.image) {
 		card1.pairFound = true;
 		card2.pairFound = true;
+
+		checkGameWon();
 	} else {
 		flipCardsBack();
 	}
@@ -98,5 +100,20 @@ function flipCardsBack() {
 	for (let cardIndex of activeCards) {
 		const cardId = cards[cardIndex].id;
 		document.getElementById(cardId).classList.toggle('flip');
+	}
+}
+
+function checkGameWon() {
+	let gameWon = true;
+
+	for (let card of cards) {
+		if (!card.pairFound) {
+			gameWon = false;
+			break;
+		}
+	}
+
+	if (gameWon) {
+		alert('Congratulations, you won the game!');
 	}
 }
