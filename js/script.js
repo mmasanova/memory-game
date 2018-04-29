@@ -3,8 +3,8 @@ let cards = [];
 let images = [ 'cat.svg', 'cow.svg', 'fish.svg', 'owl.svg', 'panda.svg', 'pig.svg', 'penguin.svg', 'rabbit.svg' ];
 let activeCards = [];
 let startTime;
-let finalTime;
 let timer = null;
+let ellapsedTime;
 let noMoves = 0;
 let starRating = 3;
 let gameWon = false;
@@ -169,6 +169,8 @@ function flipCardsBack() {
 	}
 }
 
+/* Game won */
+
 function checkGameWon() {
 	let won = true;
 
@@ -178,12 +180,76 @@ function checkGameWon() {
 			break;
 		}
 	}
-
+	
 	if (won) {
 		clearTimeout(timer);
 		gameWon = true;
-		alert('Congratulations, you won the game!');
+		showWinningPopup();
 	}
+}
+
+function showWinningPopup() {
+	const wrapper = document.createElement('div');
+	wrapper.id = 'popup-wrapper';
+
+	const popup = document.createElement('div');
+	popup.id = 'popup';
+
+	const message = document.createElement('div');
+	message.id = 'popup-message';
+	message.innerText = `Congratulations, you won the game in `; 
+
+	if (ellapsedTime.minutes > 0) {
+		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute';
+		message.innerText += `${ellapsedTime.minutes} ${minutesText} and `;
+	}
+
+	message.innerText += `${ellapsedTime.seconds} seconds with ${starRating} star rating.
+						
+						Would you like to play again?`;
+
+	popup.appendChild(message);
+
+	const footer = document.createElement('div');
+	footer.id = 'popup-footer';
+
+	const noButton = document.createElement('button');
+	noButton.innerHTML = 'No';
+	noButton.id = 'popup-no';
+	noButton.className = 'popup-button';
+	noButton.addEventListener('click', removePopup);
+
+	footer.appendChild(noButton);
+
+	const yesButton = document.createElement('button');
+	yesButton.innerHTML = 'Yes';
+	yesButton.id = 'popup-yes';
+	yesButton.className = 'popup-button';
+	yesButton.addEventListener('click', popupYesClick);
+
+	footer.appendChild(yesButton);
+
+	popup.appendChild(footer);
+	wrapper.appendChild(popup);
+	document.body.appendChild(wrapper);
+}
+
+function popupYesClick() {
+	removePopup();
+	resetGame();
+}
+
+function removePopup() {
+	const wrapper = document.getElementById('popup-wrapper');
+
+	/* Remove event listeners to avoid memory leaks in older browsers */
+	const noButton = document.getElementById('popup-no');
+	noButton.removeEventListener('click', removePopup);
+
+	const yesButton = document.getElementById('popup-yes');
+	yesButton.removeEventListener('click', popupYesClick);
+
+	wrapper.remove();
 }
 
 /* Timer */
@@ -198,19 +264,25 @@ function startTimer() {
 function timerTick() {
 	const dateNow = new Date();
 	const timerElement = document.getElementById('timer');
-	const ellapsedTime = new Date(dateNow.getTime() - startTime);
-	const hours = formatTime(ellapsedTime.getHours());
-	const minutes = formatTime(ellapsedTime.getMinutes());
-	const seconds = formatTime(ellapsedTime.getSeconds());
-	let displayTime = `${minutes}:${seconds}`;
-
-	if (hours > 0) displayTime = `${hours}:${displayTime}`;
+	
+	const ellapsedTimeMills = dateNow.getTime() - startTime;
+	ellapsedTime = getTimeFromMilliseconds(ellapsedTimeMills);
+	
+	let displayTime = `${formatTime(ellapsedTime.minutes)}:${formatTime(ellapsedTime.seconds)}`;
 
 	timerElement.innerHTML = displayTime;
 
 	if (!gameWon) {
 		timer = setTimeout(timerTick, 1000);
 	}
+}
+
+function getTimeFromMilliseconds(mills) {
+	const secondsMills = (mills % 60000);
+	const seconds = (secondsMills / 1000).toFixed(0);
+	const minutes = (mills - secondsMills) / 60000;
+
+	return { seconds: seconds, minutes: minutes };
 }
 
 function formatTime(time) {
