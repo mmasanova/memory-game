@@ -16,6 +16,8 @@ At this point the game timer will start.
 Once you turn two cards they are compared and if the images match they will stay revealed.
 If the images do not match cards return back to their hidden state.
 
+Continue to turn cards until you find all matches.
+
 Find all matching images within 12 moves and you will get 3 star rating for your game.
 Find all matching images within 18 moves and you will get 2 star rating.
 Any more moves will give you a 1 star rating.
