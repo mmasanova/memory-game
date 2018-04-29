@@ -28,6 +28,7 @@ function prepareGame() {
 	starRating = 3;
 
 	setUpStarRating();
+	resetCards();
 	shuffleCards();
 	displayCards();
 }
@@ -45,6 +46,12 @@ function createCards() {
 		cards.push(card);
 		cardId += 1;
 	}	
+}
+
+function resetCards() {
+	cards.forEach(function (card) {
+		card.pairFound = false;
+	});
 }
 
 function displayCards() {
