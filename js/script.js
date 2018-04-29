@@ -1,6 +1,5 @@
 
 let cards = [];
-let images = [ 'cat.svg', 'cow.svg', 'fish.svg', 'owl.svg', 'panda.svg', 'pig.svg', 'penguin.svg', 'rabbit.svg' ];
 let activeCards = [];
 let startTime;
 let timer = null;
@@ -8,6 +7,16 @@ let ellapsedTime;
 let noMoves = 0;
 let starRating = 3;
 let gameWon = false;
+let images = [ 
+	'cat.svg', 
+	'cow.svg', 
+	'fish.svg', 
+	'owl.svg', 
+	'panda.svg', 
+	'pig.svg', 
+	'penguin.svg', 
+	'rabbit.svg'
+];
 
 document.addEventListener('DOMContentLoaded', initialise);
 
@@ -256,12 +265,12 @@ function showWinningPopup() {
 	message.innerText = 'Congratulations, you won the game in '; 
 
 	if (ellapsedTime.minutes > 0) {
-		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute';
-		message.innerText += ellapsedTime.minutes + ' ' + minutesText + ' and ';
+		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute' +
+			ellapsedTime.minutes + ' ' + minutesText + ' and ';
 	}
 
-	message.innerText += ellapsedTime.seconds + ' seconds with ' + starRating + ' star rating.'
-	message.innerText += '\r\nWould you like to play again?'
+	message.innerText += ellapsedTime.seconds + ' seconds with ' + starRating + ' star rating.' +
+		'\r\nWould you like to play again?'
 
 	popup.appendChild(message);
 
