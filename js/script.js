@@ -297,6 +297,12 @@ function showWinningPopup() {
 	const popup = document.createElement('div');
 	popup.id = 'popup';
 
+	const title = document.createElement('div');
+	title.id = 'popup-title';
+	title.innerText = 'You won!!!';
+	
+	popup.appendChild(title);
+
 	const message = document.createElement('div');
 	message.id = 'popup-message';
 	message.innerText = 'Congratulations, you won the game in '; 

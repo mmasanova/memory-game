@@ -190,6 +190,12 @@ body {
     max-width: 20em;
 }
 
+#popup-title {
+    font-size: 1.2em;
+    color: #006064;
+    padding: 0 0 1em 0;
+}
+
 #popup-message {
     line-height: 1.3em;
 }
@@ -214,6 +220,8 @@ body {
     background: #006064;
     color: #fff;
     font-size: 1em;
+    border: none;
+    cursor: pointer;
 }
 
 /* Animations */
