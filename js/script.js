@@ -313,8 +313,8 @@ function showWinningPopup() {
 	message.innerText = 'Congratulations, you won the game in '; 
 
 	if (ellapsedTime.minutes > 0) {
-		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute' +
-			ellapsedTime.minutes + ' ' + minutesText + ' and ';
+		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute';
+		message.innerText += ellapsedTime.minutes + ' ' + minutesText + ' and ';
 	}
 
 	message.innerText += ellapsedTime.seconds + ' seconds with ' + starRating + ' star rating.' +
