@@ -26,6 +26,7 @@ function initialise() {
 function prepareGame() {
 	noMoves = 0;
 	starRating = 3;
+	gameWon = false;
 
 	setUpStarRating();
 	resetCards();
@@ -189,8 +190,8 @@ function checkGameWon() {
 	}
 	
 	if (won) {
-		clearTimeout(timer);
 		gameWon = true;
+		clearTimeout(timer);
 		showWinningPopup();
 	}
 }
@@ -305,6 +306,10 @@ function resetTimer() {
 
 	timer = null;
 	timerElement.innerHTML = '00:00';
+	ellapsedTime = {
+		minutes: 0,
+		seconds: 0
+	};
 }
 
 /* Moves */
