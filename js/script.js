@@ -478,13 +478,13 @@ function displayStarRating() {
 * @description Initialises star rating
 */
 function setUpStarRating() {
-	const starRating = document.getElementById('star-rating');
+	const starRatingContainer = document.getElementById('star-rating');
 	let html = '';
 
 	for (let starX = 0; starX < 3; starX++) {
 		html += '<i id="star-' + (starX + 1) + '" class="mdi mdi-star star"></i>';
 	}
 
-	starRating.innerHTML = html;
+	starRatingContainer.innerHTML = html;
 	starRating = 3;
 }
