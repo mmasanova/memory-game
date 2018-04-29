@@ -7,10 +7,6 @@ let ellapsedTime;
 let noMoves = 0;
 let starRating = 3;
 let gameWon = false;
-let animationTimeouts = {
-	match: null,
-	mismatch: null
-};
 let images = [ 
 	'cat.svg', 
 	'cow.svg', 
@@ -128,7 +124,6 @@ function displayCards() {
 * @description Resets the game
 */
 function resetGame() {
-	cancelAnimations();
 	resetTimer();
 	resetMoves();
 	clearCards();
@@ -209,7 +204,6 @@ function cardClick(event) {
 function checkCardsMatch() {
 	const card1 = cards[activeCards[0]];
 	const card2 = cards[activeCards[1]];
-	const updateCards = activeCards.slice();
 
 	updateMoves();
 	updateStarRating();
@@ -218,27 +212,22 @@ function checkCardsMatch() {
 		card1.pairFound = true;
 		card2.pairFound = true;
 
-		animateMatchingCards(updateCards);
+		animateMatchingCards();
 		checkGameWon();
 	} else {
-		shakeCards(updateCards);
-
-		setTimeout(function() {
-			flipCardsBack(updateCards);
-		}, 300);
+		shakeCards();
 	}
 }
 
 /**
 * @description Adds and removes animation to correctly matched cards
-* @param {array} cardIndexes of cards to animate
 */
-function animateMatchingCards(cardIndexes) {
-	cardIndexes.forEach(function(cardIndex) {
+function animateMatchingCards() {
+	activeCards.forEach(function(cardIndex) {
 		const card = document.getElementById(cards[cardIndex].id);
 		card.classList.add('grow-shrink');
 
-		animationTimeouts.match = setTimeout(function() { 
+		setTimeout(function() { 
 			card.classList.remove('grow-shrink');
 			activeCards = [];
 		}, 500);
@@ -247,43 +236,37 @@ function animateMatchingCards(cardIndexes) {
 
 /**
 * @description Adds and removes shaking animation to mismatched cards
-* @param {array} cardIndexes of cards to shake
 */
-function shakeCards(cardIndexes) {
-	cardIndexes.forEach(function(cardIndex) {
-		const card = document.getElementById(cards[cardIndex].id);
-		card.classList.add('shake');
+function shakeCards() {
+	let cardElements = [];
 
-		animationTimeouts.mismatch = setTimeout(function() { 
-			card.classList.remove('shake');
-			activeCards = [];
-		}, 300);
+	activeCards.forEach(function(cardIndex) {
+		const cardElement = document.getElementById(cards[cardIndex].id);
+		cardElements.push(cardElement);
+		cardElement.classList.add('shake');
 	});
-}
 
-/**
-* @description Cancels any card animation timeouts that are running
-*/
-function cancelAnimations() {
-	if (animationTimeouts.match !== null) {
-		clearTimeout(animationTimeouts.match);
-		animationTimeouts.match = null;
-	}
-
-	if (animationTimeouts.mismatch !== null) {
-		clearTimeout(animationTimeouts.mismatch);
-		animationTimeouts.mismatch = null;
-	}
+	setTimeout(function() { 
+		cardElements.forEach(function(card) {
+			card.classList.remove('shake');
+		});
+		
+		flipCardsBack();
+		activeCards = [];
+	}, 300);
 }
 
 /**
 * @description Flips current pair of revealed cards back
-* @param {array} cardIndexes of cards to flip
 */
-function flipCardsBack(cardIndexes) {
-	cardIndexes.forEach(function(cardIndex) {
+function flipCardsBack() {
+	activeCards.forEach(function(cardIndex) {
 		const cardId = cards[cardIndex].id;
-		document.getElementById(cardId).classList.toggle('flip');
+		const card = document.getElementById(cardId);
+
+		if (!card.classList.contains('flip')) {
+			card.classList.add('flip');
+		}
 	});
 }
 
