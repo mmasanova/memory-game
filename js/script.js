@@ -7,6 +7,10 @@ let ellapsedTime;
 let noMoves = 0;
 let starRating = 3;
 let gameWon = false;
+let animationTimeouts = {
+	match: null,
+	mismatch: null
+};
 let images = [ 
 	'cat.svg', 
 	'cow.svg', 
@@ -124,6 +128,7 @@ function displayCards() {
 * @description Resets the game
 */
 function resetGame() {
+	cancelAnimations();
 	resetTimer();
 	resetMoves();
 	clearCards();
@@ -180,6 +185,8 @@ function getRandomNumber(max) {
 * @param {object} event Event that triggered the function
 */
 function cardClick(event) {
+	if (activeCards.length === 2) return;
+
 	const card = event.currentTarget;
 	const cardIndex = card.dataset.index;
 	const alreadyFlipped = (activeCards.indexOf(cardIndex) !== -1);
@@ -220,8 +227,6 @@ function checkCardsMatch() {
 			flipCardsBack(updateCards);
 		}, 300);
 	}
-
-	activeCards = [];
 }
 
 /**
@@ -233,8 +238,9 @@ function animateMatchingCards(cardIndexes) {
 		const card = document.getElementById(cards[cardIndex].id);
 		card.classList.add('grow-shrink');
 
-		setTimeout(function() { 
+		animationTimeouts.match = setTimeout(function() { 
 			card.classList.remove('grow-shrink');
+			activeCards = [];
 		}, 500);
 	});
 }
@@ -248,10 +254,26 @@ function shakeCards(cardIndexes) {
 		const card = document.getElementById(cards[cardIndex].id);
 		card.classList.add('shake');
 
-		setTimeout(function() { 
+		animationTimeouts.mismatch = setTimeout(function() { 
 			card.classList.remove('shake');
+			activeCards = [];
 		}, 300);
 	});
+}
+
+/**
+* @description Cancels any card animation timeouts that are running
+*/
+function cancelAnimations() {
+	if (animationTimeouts.match !== null) {
+		clearTimeout(animationTimeouts.match);
+		animationTimeouts.match = null;
+	}
+
+	if (animationTimeouts.mismatch !== null) {
+		clearTimeout(animationTimeouts.mismatch);
+		animationTimeouts.mismatch = null;
+	}
 }
 
 /**
