@@ -37,7 +37,7 @@ function prepareGame() {
 function createCards() {
 	let cardId = 0;
 
-	for (let image of images) {
+	images.forEach(function(image) {
 		let card = {
 			image: image,
 			id: 'card' + cardId,
@@ -46,7 +46,7 @@ function createCards() {
 
 		cards.push(card);
 		cardId += 1;
-	}	
+	});	
 }
 
 function resetCards() {
@@ -76,13 +76,19 @@ function displayCards() {
 		cardDiv.id = card.id;
 		cardDiv.dataset.index = cardX;
 
-		const html = `<div class="front">
-						<img src="images/${card.image}">
-					</div>
-					<div class="back">
-					</div>`;
+		const front = document.createElement('div');
+		front.className = 'front';
 
-		cardDiv.innerHTML = html;
+		const img = document.createElement('img');
+		img.src = 'images/' + card.image;
+
+		front.appendChild(img);
+		cardDiv.appendChild(front);
+
+		const back = document.createElement('div');
+		back.className = 'back';
+		cardDiv.appendChild(back);
+
 		cardDiv.addEventListener('click', cardClick);
 		row.appendChild(cardDiv);
 	}
@@ -110,10 +116,10 @@ function clearCards() {
 		for (let cardX = row.childNodes.length - 1; cardX >= 0; cardX--) { 
 			const card = row.childNodes[cardX];
 			card.removeEventListener('click', cardClick);
-			card.remove();
+			card.parentNode.removeChild(card);
 		}
 
-		row.remove();
+		row.parentNode.removeChild(row);
 	}
 }
 
@@ -171,10 +177,10 @@ function checkCardsMatch() {
 }
 
 function flipCardsBack() {
-	for (let cardIndex of activeCards) {
+	activeCards.forEach(function(cardIndex) {
 		const cardId = cards[cardIndex].id;
 		document.getElementById(cardId).classList.toggle('flip');
-	}
+	});
 }
 
 /* Game won */
@@ -182,8 +188,8 @@ function flipCardsBack() {
 function checkGameWon() {
 	let won = true;
 
-	for (let card of cards) {
-		if (!card.pairFound) {
+	for (let cardX = 0; cardX < cards.length; cardX++) {
+		if (!cards[cardX].pairFound) {
 			won = false;
 			break;
 		}
@@ -205,16 +211,15 @@ function showWinningPopup() {
 
 	const message = document.createElement('div');
 	message.id = 'popup-message';
-	message.innerText = `Congratulations, you won the game in `; 
+	message.innerText = 'Congratulations, you won the game in '; 
 
 	if (ellapsedTime.minutes > 0) {
 		const minutesText = (ellapsedTime.minutes > 1) ? 'minutes' : 'minute';
-		message.innerText += `${ellapsedTime.minutes} ${minutesText} and `;
+		message.innerText += ellapsedTime.minutes + ' ' + minutesText + ' and ';
 	}
 
-	message.innerText += `${ellapsedTime.seconds} seconds with ${starRating} star rating.
-						
-						Would you like to play again?`;
+	message.innerText += ellapsedTime.seconds + ' seconds with ' + starRating + ' star rating.'
+	message.innerText += '\r\nWould you like to play again?'
 
 	popup.appendChild(message);
 
@@ -257,7 +262,7 @@ function removePopup() {
 	const yesButton = document.getElementById('popup-yes');
 	yesButton.removeEventListener('click', popupYesClick);
 
-	wrapper.remove();
+	wrapper.parentNode.removeChild(wrapper);
 }
 
 /* Timer */
@@ -276,7 +281,7 @@ function timerTick() {
 	const ellapsedTimeMills = dateNow.getTime() - startTime;
 	ellapsedTime = getTimeFromMilliseconds(ellapsedTimeMills);
 	
-	let displayTime = `${formatTime(ellapsedTime.minutes)}:${formatTime(ellapsedTime.seconds)}`;
+	let displayTime = formatTime(ellapsedTime.minutes) + ':' + formatTime(ellapsedTime.seconds);
 
 	timerElement.innerHTML = displayTime;
 
@@ -380,7 +385,7 @@ function setUpStarRating() {
 	let html = '';
 
 	for (let starX = 0; starX < 3; starX++) {
-		html += `<i id="star-${starX + 1}" class="mdi mdi-star star"></i>`;
+		html += '<i id="star-' + (starX + 1) + '" class="mdi mdi-star star"></i>';
 	}
 
 	starRating.innerHTML = html;
