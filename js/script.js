@@ -189,7 +189,7 @@ function cardClick(event) {
 		activeCards.push(cardIndex);
 
 		if (activeCards.length === 2) {
-			setTimeout(checkCardsMatch, 500);
+			setTimeout(checkCardsMatch, 300);
 		}
 	}
 
@@ -202,6 +202,7 @@ function cardClick(event) {
 function checkCardsMatch() {
 	const card1 = cards[activeCards[0]];
 	const card2 = cards[activeCards[1]];
+	const updateCards = activeCards.slice();
 
 	updateMoves();
 	updateStarRating();
@@ -210,19 +211,55 @@ function checkCardsMatch() {
 		card1.pairFound = true;
 		card2.pairFound = true;
 
+		animateMatchingCards(updateCards);
 		checkGameWon();
 	} else {
-		flipCardsBack();
+		shakeCards(updateCards);
+
+		setTimeout(function() {
+			flipCardsBack(updateCards);
+		}, 300);
 	}
 
 	activeCards = [];
 }
 
 /**
-* @description Flips current pair of revealed cards back
+* @description Adds and removes animation to correctly matched cards
+* @param {array} cardIndexes of cards to animate
 */
-function flipCardsBack() {
-	activeCards.forEach(function(cardIndex) {
+function animateMatchingCards(cardIndexes) {
+	cardIndexes.forEach(function(cardIndex) {
+		const card = document.getElementById(cards[cardIndex].id);
+		card.classList.add('grow-shrink');
+
+		setTimeout(function() { 
+			card.classList.remove('grow-shrink');
+		}, 500);
+	});
+}
+
+/**
+* @description Adds and removes shaking animation to mismatched cards
+* @param {array} cardIndexes of cards to shake
+*/
+function shakeCards(cardIndexes) {
+	cardIndexes.forEach(function(cardIndex) {
+		const card = document.getElementById(cards[cardIndex].id);
+		card.classList.add('shake');
+
+		setTimeout(function() { 
+			card.classList.remove('shake');
+		}, 300);
+	});
+}
+
+/**
+* @description Flips current pair of revealed cards back
+* @param {array} cardIndexes of cards to flip
+*/
+function flipCardsBack(cardIndexes) {
+	cardIndexes.forEach(function(cardIndex) {
 		const cardId = cards[cardIndex].id;
 		document.getElementById(cardId).classList.toggle('flip');
 	});
