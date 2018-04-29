@@ -11,6 +11,9 @@ let gameWon = false;
 
 document.addEventListener('DOMContentLoaded', initialise);
 
+/**
+* @description Initialises images, restart button, cards and the game
+*/
 function initialise() {
 	const restart = document.getElementById('restart');
 	restart.addEventListener('click', resetGame);
@@ -23,17 +26,20 @@ function initialise() {
 
 /* Set up game */
 
+/**
+* @description Prepares and displays new game
+*/
 function prepareGame() {
-	noMoves = 0;
-	starRating = 3;
 	gameWon = false;
 
 	setUpStarRating();
-	resetCards();
 	shuffleCards();
 	displayCards();
 }
 
+/**
+* @description Creates card objects
+*/
 function createCards() {
 	let cardId = 0;
 
@@ -49,12 +55,18 @@ function createCards() {
 	});	
 }
 
+/**
+* @description Resets card objects' pairFound attributes
+*/
 function resetCards() {
 	cards.forEach(function (card) {
 		card.pairFound = false;
 	});
 }
 
+/**
+* @description Displays cards
+*/
 function displayCards() {
 	const container = document.getElementById('cards-container');
 	const docFragment = document.createDocumentFragment();
@@ -99,14 +111,20 @@ function displayCards() {
 
 /* Restart game */
 
+/**
+* @description Resets the game
+*/
 function resetGame() {
 	resetTimer();
 	resetMoves();
 	clearCards();
+	resetCards();
 	prepareGame();
 }
 
-/* Remove cards including listeners to avoid memory leaks in older browsers */
+/**
+* @description Removes cards including listeners to avoid memory leaks in older browsers
+*/
 function clearCards() {
 	const container = document.getElementById('cards-container');
 
@@ -125,7 +143,9 @@ function clearCards() {
 
 /* Shuffle cards */
 
-/* Switch each card with another card with random index */
+/**
+* @description Shuffles cards, switches each card with another card with random index
+*/
 function shuffleCards() {
 	for (let cardX = 0; cardX < cards.length; cardX++) {
 		const randomIndex = getRandomNumber(7);
@@ -135,12 +155,21 @@ function shuffleCards() {
 	}
 }
 
+/**
+* @description Calculates random number between 0 and max
+* @param {number} max 
+* @returns {number} random number
+*/
 function getRandomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
 /* Handle card click */
 
+/**
+* @description Turns clicked card
+* @param {object} event Event that triggered the function
+*/
 function cardClick(event) {
 	const card = event.currentTarget;
 	const cardIndex = card.dataset.index;
@@ -158,11 +187,15 @@ function cardClick(event) {
 	if (timer === null) startTimer();
 }
 
+/**
+* @description Checks if revealed pair of cards matches
+*/
 function checkCardsMatch() {
 	const card1 = cards[activeCards[0]];
 	const card2 = cards[activeCards[1]];
 
 	updateMoves();
+	updateStarRating();
 
 	if (card1.image === card2.image) {
 		card1.pairFound = true;
@@ -176,6 +209,9 @@ function checkCardsMatch() {
 	activeCards = [];
 }
 
+/**
+* @description Flips current pair of revealed cards back
+*/
 function flipCardsBack() {
 	activeCards.forEach(function(cardIndex) {
 		const cardId = cards[cardIndex].id;
@@ -185,6 +221,9 @@ function flipCardsBack() {
 
 /* Game won */
 
+/**
+* @description Checks if game is won and shows popup if game is won
+*/
 function checkGameWon() {
 	let won = true;
 
@@ -202,6 +241,9 @@ function checkGameWon() {
 	}
 }
 
+/**
+* @description Shows winning popup
+*/
 function showWinningPopup() {
 	const wrapper = document.createElement('div');
 	wrapper.id = 'popup-wrapper';
@@ -247,11 +289,17 @@ function showWinningPopup() {
 	document.body.appendChild(wrapper);
 }
 
+/**
+* @description Removes popup and resets the game
+*/
 function popupYesClick() {
 	removePopup();
 	resetGame();
 }
 
+/**
+* @description Removes winning popup
+*/
 function removePopup() {
 	const wrapper = document.getElementById('popup-wrapper');
 
@@ -267,13 +315,18 @@ function removePopup() {
 
 /* Timer */
 
+/**
+* @description Starts the timer
+*/
 function startTimer() {
 	const dateNow = new Date();
 	startTime = dateNow.getTime();
 	timerTick();
 }
 
-/* Check difference between start time and time now, display the difference */
+/**
+* @description Checks difference between start time and time now, displays the difference and prepares to run again if game not won
+*/
 function timerTick() {
 	const dateNow = new Date();
 	const timerElement = document.getElementById('timer');
@@ -290,20 +343,40 @@ function timerTick() {
 	}
 }
 
+/**
+* @description Returns number of minutes and seconds from milliseconds
+* @param {number} mills
+* @returns {object} time
+*/
+
+/**
+ * @typedef {Object} time
+ * @property {number} seconds The number of seconds
+ * @property {number} minutes The number of minutes
+ */
 function getTimeFromMilliseconds(mills) {
 	const secondsMills = (mills % 60000);
 	const seconds = (secondsMills / 1000).toFixed(0);
 	const minutes = (mills - secondsMills) / 60000;
+	const time = { seconds: seconds, minutes: minutes };
 
-	return { seconds: seconds, minutes: minutes };
+	return time;
 }
 
+/**
+* @description Formats time integer to 2 digit format
+* @param {number} time
+* @returns {string} time in 2 digit format
+*/
 function formatTime(time) {
 	if (time < 10) time = '0' + time;
 
 	return time;
 }
 
+/**
+* @description Resets the timer and the timer element
+*/
 function resetTimer() {
 	const timerElement = document.getElementById('timer');
 
@@ -319,22 +392,30 @@ function resetTimer() {
 
 /* Moves */
 
+/**
+* @description Adds 1 to number of moves and updates moves indicator
+*/
 function updateMoves() {
 	const moves = document.getElementById('moves');
 	
 	noMoves += 1;
 	moves.innerHTML = noMoves;
-
-	updateStarRating();
 }
 
+/**
+* @description Resets the moves indicator to 0
+*/
 function resetMoves() {
 	const moves = document.getElementById('moves');
 	moves.innerHTML = 0;
+	noMoves = 0;
 }
 
 /* Star rating */
 
+/**
+* @description Updates star rating based on number of moves
+*/
 function updateStarRating() {
 	const oldRating = starRating;
 	let newRating;
@@ -358,6 +439,10 @@ function updateStarRating() {
 	}
 }
 
+/**
+* @description Displays star rating based on starRating current value
+*/
+
 function displayStarRating() {
 	let updateStar = null;
 
@@ -380,6 +465,9 @@ function displayStarRating() {
 	}
 }
 
+/**
+* @description Initialises star rating
+*/
 function setUpStarRating() {
 	const starRating = document.getElementById('star-rating');
 	let html = '';
@@ -389,4 +477,5 @@ function setUpStarRating() {
 	}
 
 	starRating.innerHTML = html;
+	starRating = 3;
 }
