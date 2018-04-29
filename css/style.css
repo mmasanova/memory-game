@@ -187,6 +187,7 @@ body {
     background: #fff;
     border-radius: 4px;
     padding: 1em;
+    max-width: 20em;
 }
 
 #popup-message {
